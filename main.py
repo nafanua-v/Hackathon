@@ -15,7 +15,7 @@ screen.setup(900, 900)
 
 t = turtle.Turtle()
 t.hideturtle()
-t.pensize(5)
+t.pensize(1)
 # FROM HERE TO DOWN THERE, CHATGPT HELPED A LOT
 
 # Swans
@@ -51,6 +51,7 @@ for contour in contours:
     new_x = x - 450
     new_y = 450 - y
     t.goto(new_x, new_y)
+    t.begin_fill()
     t.pendown()
 
     # Draw the rest of the contour
@@ -60,6 +61,19 @@ for contour in contours:
         new_y = 450 - y
         t.goto(new_x, new_y)
 
+    # trying to make a shape so i can use fill
+    first_point = contour[0][0]
+    x, y = first_point
+    new_x = x - 452
+    new_y = 452 - y
+    t.goto(new_x, new_y)
+
+    for point in contour[1:]:
+        x, y = point[0]
+        new_x = x - 452
+        new_y = 452 - y
+        t.goto(new_x, new_y)
+    t.end_fill()
     t.penup()  # Important: lift pen after each contour
 
 # Lake
@@ -125,14 +139,6 @@ def wait(seconds):
 
 
 
-def hex_to_rgb(hex_color):
-    # Strip the '#' character if present
-    hex_color = hex_color.lstrip('#')
-    # Convert the hex values to RGB
-    r = int(hex_color[0:2], 16)
-    g = int(hex_color[2:4], 16)
-    b = int(hex_color[4:6], 16)
-    return (r, g, b)
 def get_color_at_position():
     # Get turtle position and screen coordinates
     c = turtle.Screen().getcanvas()
@@ -140,20 +146,14 @@ def get_color_at_position():
     items = c.find_overlapping(x, -y, x, -y) # omg its working
     if len(items) > 0:
         coloratpixel = c.itemcget(items[-1], "fill")
-        # If the color is a hex string, convert it to an RGB tuple
-        if coloratpixel == "":
-            # Get the "outline" color (pen color) instead of the fill
-            coloratpixel = c.winfo_rgb(c.itemcget(items[-1], "stroke"))
-        if coloratpixel.startswith('#'):
-            coloratpixel = hex_to_rgb(coloratpixel)
+        print(coloratpixel)
         return coloratpixel
     else:
+        print("No object")
         return "1, 1, 1"  # Return fallback color, is background color
 def draw_or_not():
-    t.hideturtle()
-    coloratpixel = get_color_at_position()
-    t.showturtle()
-    if coloratpixel == "0, 0, 0":
+    color_beneath = get_color_at_position()
+    if color_beneath == "black":
         t.pendown()
     else:
         t.penup()
@@ -172,11 +172,11 @@ t.shape("circle")
 t.turtlesize(0.5)
 t.showturtle()
 screen.tracer(1)
-screen.delay(0.1)
 
-for i in range(90):
+
+for i in range(180):
     t.penup()
-    t.setposition(-450, 450-50*i)
+    t.setposition(-450, 450-5*i)
     for i in range(900):
         draw_or_not()
         t.forward(1)
@@ -187,15 +187,4 @@ for i in range(90):
 
 
 
-
-
-
-
-
-
-
-
-
-
 turtle.done()
-
