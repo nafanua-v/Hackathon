@@ -7,6 +7,8 @@ turtle.colormode(255)
 turtle.getscreen()
 screen = turtle.Screen()
 screen.clear()
+
+screen.bgcolor("#0A0A0A")
 screen.tracer(0)
 screen.screensize(900, 900)
 screen.setup(900, 900)
@@ -160,27 +162,26 @@ def draw_or_not():
 
 
 
-
 # the lines part
 t.pensize(1)
-screen.bgcolor(1, 1, 1)
 screen.update()
 t.speed(10)
-tcolor("red")
-t.pencolor("red")
+t.pencolor("white")
 t.shape("circle")
 t.turtlesize(0.5)
 t.showturtle()
-screen.tracer(1)
+screen.tracer(0)
 
 
-for i in range(180):
+for i in range(300):
     t.penup()
-    t.setposition(-450, 450-5*i)
+    t.setposition(-450, 450-3*i)
     for i in range(900):
         draw_or_not()
         t.forward(1)
-
+    screen.update()
+    if t.ycor() <= 150 and t.ycor() >=-150:
+        wait(0.1)
 
 
 
