@@ -22,7 +22,7 @@ t.pensize(1)
 
 # Swans
 # Load and preprocess image
-image = cv2.imread("images/the_swans.png")
+image = cv2.imread("images/final_swans.png")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
@@ -78,9 +78,65 @@ for contour in contours:
     t.end_fill()
     t.penup()  # Important: lift pen after each contour
 
+# Load and preprocess image
+image = cv2.imread("images/swans_shading.png")
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+_, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+
+# Find contours
+contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# Scales to 900x900
+def scale_points(contours, width=900, height=900):
+    points = []
+    for contour in contours:
+        for point in contour:
+            x, y = point[0]
+            # Flip y and center (turtle uses center as (0,0))
+            new_x = x - width // 2
+            new_y = height // 2 - y
+            points.append((new_x, new_y))
+    return points
+
+
+points = scale_points(contours)
+
+for contour in contours:
+    t.penup()
+
+    # Move to the first point in the contour
+    first_point = contour[0][0]
+    x, y = first_point
+    new_x = x - 450
+    new_y = 450 - y
+    t.goto(new_x, new_y)
+    t.begin_fill()
+    t.pendown()
+
+    # Draw the rest of the contour
+    for point in contour[1:]:
+        x, y = point[0]
+        new_x = x - 450
+        new_y = 450 - y
+        t.goto(new_x, new_y)
+
+    # trying to make a shape so i can use fill
+    first_point = contour[0][0]
+    x, y = first_point
+    new_x = x - 452
+    new_y = 452 - y
+    t.goto(new_x, new_y)
+
+    for point in contour[1:]:
+        x, y = point[0]
+        new_x = x - 452
+        new_y = 452 - y
+        t.goto(new_x, new_y)
+    t.end_fill()
+    t.penup()  # Important: lift pen after each contour
 # Lake
 # Load and preprocess image
-image = cv2.imread("images/lake_outline.png")
+image = cv2.imread("images/lake_final.png")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
