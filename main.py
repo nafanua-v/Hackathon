@@ -14,177 +14,305 @@ screen.screensize(900, 900)
 screen.setup(900, 900)
 
 
-
 t = turtle.Turtle()
 t.hideturtle()
 t.pensize(1)
 # FROM HERE TO DOWN THERE, CHATGPT HELPED A LOT
 
-# Swans
-# Load and preprocess image
-image = cv2.imread("images/final_swans.png")
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-_, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-
-# Find contours
-contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-# Scales to 900x900
-def scale_points(contours, width=900, height=900):
-    points = []
-    for contour in contours:
-        for point in contour:
-            x, y = point[0]
-            # Flip y and center (turtle uses center as (0,0))
-            new_x = x - width // 2
-            new_y = height // 2 - y
-            points.append((new_x, new_y))
-    return points
-
-
-points = scale_points(contours)
-
-for contour in contours:
+def clear_the_screen():
+    t.pencolor("#0A0A0A")
+    t.pensize(10)
     t.penup()
+    for i in range(450):
+        t.setposition(-450, 450-2*i)
+        t.forward(900)
+    t.pensize(1)
+def draw(water, body1, shading2):
+    # Swans
+    # Load and preprocess image
+    image = cv2.imread(body1)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
-    # Move to the first point in the contour
-    first_point = contour[0][0]
-    x, y = first_point
-    new_x = x - 450
-    new_y = 450 - y
-    t.goto(new_x, new_y)
-    t.begin_fill()
-    t.pendown()
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Draw the rest of the contour
-    for point in contour[1:]:
-        x, y = point[0]
+    # Scales to 900x900
+    def scale_points(contours, width=900, height=900):
+        points = []
+        for contour in contours:
+            for point in contour:
+                x, y = point[0]
+                # Flip y and center (turtle uses center as (0,0))
+                new_x = x - width // 2
+                new_y = height // 2 - y
+                points.append((new_x, new_y))
+        return points
+
+    points = scale_points(contours)
+
+    for contour in contours:
+        t.penup()
+
+        # Move to the first point in the contour
+        first_point = contour[0][0]
+        x, y = first_point
         new_x = x - 450
         new_y = 450 - y
         t.goto(new_x, new_y)
+        t.begin_fill()
+        t.pendown()
 
-    # trying to make a shape so i can use fill
-    first_point = contour[0][0]
-    x, y = first_point
-    new_x = x - 452
-    new_y = 452 - y
-    t.goto(new_x, new_y)
+        # Draw the rest of the contour
+        for point in contour[1:]:
+            x, y = point[0]
+            new_x = x - 450
+            new_y = 450 - y
+            t.goto(new_x, new_y)
 
-    for point in contour[1:]:
-        x, y = point[0]
+        # trying to make a shape so i can use fill
+        first_point = contour[0][0]
+        x, y = first_point
         new_x = x - 452
         new_y = 452 - y
         t.goto(new_x, new_y)
-    t.end_fill()
-    t.penup()  # Important: lift pen after each contour
 
-# Load and preprocess image
-image = cv2.imread("images/swans_shading.png")
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-_, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-
-# Find contours
-contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-# Scales to 900x900
-def scale_points(contours, width=900, height=900):
-    points = []
-    for contour in contours:
-        for point in contour:
+        for point in contour[1:]:
             x, y = point[0]
-            # Flip y and center (turtle uses center as (0,0))
-            new_x = x - width // 2
-            new_y = height // 2 - y
-            points.append((new_x, new_y))
-    return points
+            new_x = x - 452
+            new_y = 452 - y
+            t.goto(new_x, new_y)
+        t.end_fill()
+        t.penup()  # Important: lift pen after each contour
 
+    # Load and preprocess image
+    image = cv2.imread(shading2)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
-points = scale_points(contours)
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-for contour in contours:
-    t.penup()
+    # Scales to 900x900
+    def scale_points(contours, width=900, height=900):
+        points = []
+        for contour in contours:
+            for point in contour:
+                x, y = point[0]
+                # Flip y and center (turtle uses center as (0,0))
+                new_x = x - width // 2
+                new_y = height // 2 - y
+                points.append((new_x, new_y))
+        return points
 
-    # Move to the first point in the contour
-    first_point = contour[0][0]
-    x, y = first_point
-    new_x = x - 450
-    new_y = 450 - y
-    t.goto(new_x, new_y)
-    t.begin_fill()
-    t.pendown()
+    points = scale_points(contours)
 
-    # Draw the rest of the contour
-    for point in contour[1:]:
-        x, y = point[0]
+    for contour in contours:
+        t.penup()
+
+        # Move to the first point in the contour
+        first_point = contour[0][0]
+        x, y = first_point
         new_x = x - 450
         new_y = 450 - y
         t.goto(new_x, new_y)
+        t.begin_fill()
+        t.pendown()
 
-    # trying to make a shape so i can use fill
-    first_point = contour[0][0]
-    x, y = first_point
-    new_x = x - 452
-    new_y = 452 - y
-    t.goto(new_x, new_y)
+        # Draw the rest of the contour
+        for point in contour[1:]:
+            x, y = point[0]
+            new_x = x - 450
+            new_y = 450 - y
+            t.goto(new_x, new_y)
 
-    for point in contour[1:]:
-        x, y = point[0]
+        # trying to make a shape so i can use fill
+        first_point = contour[0][0]
+        x, y = first_point
         new_x = x - 452
         new_y = 452 - y
         t.goto(new_x, new_y)
-    t.end_fill()
-    t.penup()  # Important: lift pen after each contour
 
-# Lake
-# Load and preprocess image
-image = cv2.imread("images/lake_final.png")
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-_, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-
-# Find contours
-contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-# Scales to 900x900
-def scale_points(contours, width=900, height=900):
-    points = []
-    for contour in contours:
-        for point in contour:
+        for point in contour[1:]:
             x, y = point[0]
-            # Flip y and center (turtle uses center as (0,0))
-            new_x = x - width // 2
-            new_y = height // 2 - y
-            points.append((new_x, new_y))
-    return points
+            new_x = x - 452
+            new_y = 452 - y
+            t.goto(new_x, new_y)
+        t.end_fill()
+        t.penup()  # Important: lift pen after each contour
 
+    # Lake
+    # Load and preprocess image
+    image = cv2.imread(water)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
-points = scale_points(contours)
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-for contour in contours:
-    t.penup()
+    # Scales to 900x900
+    def scale_points(contours, width=900, height=900):
+        points = []
+        for contour in contours:
+            for point in contour:
+                x, y = point[0]
+                # Flip y and center (turtle uses center as (0,0))
+                new_x = x - width // 2
+                new_y = height // 2 - y
+                points.append((new_x, new_y))
+        return points
 
-    # Move to the first point in the contour
-    first_point = contour[0][0]
-    x, y = first_point
-    new_x = x - 450
-    new_y = 450 - y
-    t.goto(new_x, new_y)
-    t.begin_fill()
-    t.pendown()
+    points = scale_points(contours)
 
-    # Draw the rest of the contour
-    for point in contour[1:]:
-        x, y = point[0]
+    for contour in contours:
+        t.penup()
+
+        # Move to the first point in the contour
+        first_point = contour[0][0]
+        x, y = first_point
         new_x = x - 450
         new_y = 450 - y
         t.goto(new_x, new_y)
-    t.end_fill()
-    t.penup()  # Important: lift pen after each contour
+        t.begin_fill()
+        t.pendown()
+
+        # Draw the rest of the contour
+        for point in contour[1:]:
+            x, y = point[0]
+            new_x = x - 450
+            new_y = 450 - y
+            t.goto(new_x, new_y)
+        t.end_fill()
+        t.penup()  # Important: lift pen after each contour
+
 # DOWN HERE
-screen.update()
 
+def draw_simple(water, body1, shading2):
+    # Swans
+    # Load and preprocess image
+    image = cv2.imread(body1)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    # Scales to 900x900
+    def scale_points(contours, width=900, height=900):
+        points = []
+        for contour in contours:
+            for point in contour:
+                x, y = point[0]
+                # Flip y and center (turtle uses center as (0,0))
+                new_x = x - width // 2
+                new_y = height // 2 - y
+                points.append((new_x, new_y))
+        return points
 
+    points = scale_points(contours)
+
+    for contour in contours:
+        t.penup()
+
+        # Move to the first point in the contour
+        first_point = contour[0][0]
+        x, y = first_point
+        new_x = x - 450
+        new_y = 450 - y
+        t.goto(new_x, new_y)
+        t.pendown()
+
+        # Draw the rest of the contour
+        for point in contour[1:]:
+            x, y = point[0]
+            new_x = x - 450
+            new_y = 450 - y
+            t.goto(new_x, new_y)
+        t.penup()  # Important: lift pen after each contour
+
+    # Load and preprocess image
+    image = cv2.imread(shading2)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Scales to 900x900
+    def scale_points(contours, width=900, height=900):
+        points = []
+        for contour in contours:
+            for point in contour:
+                x, y = point[0]
+                # Flip y and center (turtle uses center as (0,0))
+                new_x = x - width // 2
+                new_y = height // 2 - y
+                points.append((new_x, new_y))
+        return points
+
+    points = scale_points(contours)
+
+    for contour in contours:
+        t.penup()
+
+        # Move to the first point in the contour
+        first_point = contour[0][0]
+        x, y = first_point
+        new_x = x - 450
+        new_y = 450 - y
+        t.goto(new_x, new_y)
+        t.pendown()
+
+        # Draw the rest of the contour
+        for point in contour[1:]:
+            x, y = point[0]
+            new_x = x - 450
+            new_y = 450 - y
+            t.goto(new_x, new_y)
+
+        t.penup()  # Important: lift pen after each contour
+
+    # Lake
+    # Load and preprocess image
+    image = cv2.imread(water)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Scales to 900x900
+    def scale_points(contours, width=900, height=900):
+        points = []
+        for contour in contours:
+            for point in contour:
+                x, y = point[0]
+                # Flip y and center (turtle uses center as (0,0))
+                new_x = x - width // 2
+                new_y = height // 2 - y
+                points.append((new_x, new_y))
+        return points
+
+    points = scale_points(contours)
+
+    for contour in contours:
+        t.penup()
+
+        # Move to the first point in the contour
+        first_point = contour[0][0]
+        x, y = first_point
+        new_x = x - 450
+        new_y = 450 - y
+        t.goto(new_x, new_y)
+        t.pendown()
+
+        # Draw the rest of the contour
+        for point in contour[1:]:
+            x, y = point[0]
+            new_x = x - 450
+            new_y = 450 - y
+            t.goto(new_x, new_y)
+        t.penup()  # Important: lift pen after each contour
 
 def tcolor(color):
     t.color(color)
@@ -207,7 +335,6 @@ def get_color_at_position():
         coloratpixel = c.itemcget(items[-1], "fill")
         return coloratpixel
     else:
-        print("No object")
         return "1, 1, 1"  # Return fallback color, is background color
 def draw_or_not():
     color_beneath = get_color_at_position()
@@ -217,18 +344,11 @@ def draw_or_not():
         t.penup()
 
 
-
-# the lines part
-t.pensize(1)
+t.pencolor("black")
+draw("images/lake_final.png","images/final_swans.png", "images/swans_shading.png")
 screen.update()
-t.speed(10)
+
 t.pencolor("white")
-t.shape("circle")
-t.turtlesize(0.5)
-t.showturtle()
-screen.tracer(0)
-
-
 for i in range(100):
     t.penup()
     t.setposition(-450, 150-3*i)
@@ -237,10 +357,37 @@ for i in range(100):
         t.forward(1)
     screen.update()
     wait(0.1)
+wait(2)
+t.clear()
+
+t.pencolor("white")
+draw_simple("images/lake_final.png","images/final_swans.png", "images/swans_shading.png")
+screen.update()
+
+"""
 
 
+def draw_lines(water, body1, shading2):
+    clear_the_screen()
+    t.pencolor("red")
+    draw(water, body1, shading2)
+
+    rasterize_canvas()  # Preprocess once
+
+    t.pencolor("white")
+    for j in range(300):
+        y = 3 * j
+        t.penup()
+        t.setposition(-450, 450 - y)
+        for i in range(900):
+            draw_or_not_fast(i, y)
+            t.forward(1)
+    screen.update()
 
 
+screen.tracer(0)
+draw_lines("images/One.png", "images/One 1.png", "images/One 2.png")
 
+"""
 
 turtle.done()
