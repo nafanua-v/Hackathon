@@ -134,6 +134,7 @@ for contour in contours:
         t.goto(new_x, new_y)
     t.end_fill()
     t.penup()  # Important: lift pen after each contour
+
 # Lake
 # Load and preprocess image
 image = cv2.imread("images/lake_final.png")
@@ -204,7 +205,6 @@ def get_color_at_position():
     items = c.find_overlapping(x, -y, x, -y) # omg its working
     if len(items) > 0:
         coloratpixel = c.itemcget(items[-1], "fill")
-        print(coloratpixel)
         return coloratpixel
     else:
         print("No object")
@@ -229,15 +229,14 @@ t.showturtle()
 screen.tracer(0)
 
 
-for i in range(300):
+for i in range(100):
     t.penup()
-    t.setposition(-450, 450-3*i)
+    t.setposition(-450, 150-3*i)
     for i in range(900):
         draw_or_not()
         t.forward(1)
     screen.update()
-    if t.ycor() <= 150 and t.ycor() >=-150:
-        wait(0.1)
+    wait(0.1)
 
 
 
