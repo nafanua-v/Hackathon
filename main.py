@@ -703,7 +703,7 @@ def BLH_25(y, h, x):
 
 screen.tracer(0)
 
-nua = -350
+nua = -450
 for i in range(5):
     aa = 0
     bb = 0
